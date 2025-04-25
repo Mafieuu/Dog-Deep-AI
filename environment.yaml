@@ -1,0 +1,7 @@
+name: env_ML2
+channels:
+  - defaults
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+  - https://repo.anaconda.com/pkgs/msys2
+prefix: C:\Users\HP\anaconda3\envs\env_ML2
