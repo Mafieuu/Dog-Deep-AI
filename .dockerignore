@@ -1,0 +1,24 @@
+# ----------------------------------------------------------------------------------------------
+#               Chaque partie independante du projet,son dockerfil
+# ----------------------------------------------------------------------------------------------
+
+
+# for  Git ------
+.git/
+.gitignore
+
+# Ignorer les fichiers IDE et OS
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# for docker ----
+Dockerfile/
+.dockerignore
+
+
+# Ignorer les caches Python
+__pycache__/

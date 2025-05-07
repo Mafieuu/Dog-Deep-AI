@@ -1,5 +1,7 @@
 
 #  Readme ReadThedocs 
+>Info
+## - ReadThedocs en Pause jusqu'a nouvel ordre
 
 ## Contenu de la Documentation  
 Vous trouverez ici :  
