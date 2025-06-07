@@ -37,3 +37,4 @@ tornado==6.4.2
 traitlets==5.14.3
 tzdata==2025.2
 wcwidth==0.2.13
+jupyterlab==4.4.3
