@@ -4,6 +4,10 @@ def resize_with_padding(img, size=256, padding_color=(0, 0, 0)):
     """
     Redimensionne une image en conservant son ratio et ajoute du padding pour obtenir une image carrée.
     cela peut induire un biais mais nous allons soumettre chaque image test au même pipeline de sorte que pas de biais.
+    - Si l'image image fait 300x150 pixels, son ratio est 2:1
+    - Après redimensionnement, elle devient 256x128 pixels (même ratio 2:1).
+    - Pour obtenir 256x256, on ajoute du padding .
+
 
     """
     
