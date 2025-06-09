@@ -6,7 +6,7 @@ import sys
 # Ajouter src au chemin de recherche des modules
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-from src.recadrer_and_save import recadrer_save 
+from recadrer_and_save import recadrer_save 
 
 def preparer_fichiers():
     """Crée une image avec une zone visible après recadrage et génère un fichier XML."""
