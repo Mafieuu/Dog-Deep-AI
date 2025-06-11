@@ -1,4 +1,7 @@
 from PIL import Image
+import os
+import xml.etree.ElementTree as ET
+
 
 def resize_with_padding(img, size=256, padding_color=(0, 0, 0)):
     """
@@ -31,3 +34,40 @@ def resize_with_padding(img, size=256, padding_color=(0, 0, 0)):
     new_img.paste(img, (x_offset, y_offset))
 
     return new_img
+
+def recadrer_selon_bbox(img, img_path, annotation_dir, size=256, padding_color=(0,0,0)):
+
+    """
+    Cherche l'annotation XML correspondant à l'image, découpe selon la bounding box, puis resize avec resize_with_padding()
+    """
+    base = os.path.splitext(os.path.basename(img_path))[0]
+
+    for race_folder in os.listdir(annotation_dir):
+        race_path = os.path.join(annotation_dir, race_folder)
+        if not os.path.isdir(race_path):
+            continue
+        # Recherche partielle du fichier d'annotation
+        for fname in os.listdir(race_path):
+            if base in fname:
+                annotation_path = os.path.join(race_path, fname)
+                break
+        else:
+            continue
+        break
+    else:
+        raise FileNotFoundError(f"Annotation pour {base} non trouvée dans {annotation_dir}")
+
+    # Parse le XML pour extraire la bounding box
+    tree = ET.parse(annotation_path)
+    root = tree.getroot()
+    bndbox = root.find(".//bndbox")
+    xmin = int(bndbox.find("xmin").text)
+    ymin = int(bndbox.find("ymin").text)
+    xmax = int(bndbox.find("xmax").text)
+    ymax = int(bndbox.find("ymax").text)
+
+    # Découpe l'image
+    img_cropped = img.crop((xmin, ymin, xmax, ymax))
+    # Resize avec padding
+    img_final = resize_with_padding(img_cropped, size=size, padding_color=padding_color)
+    return img_final
