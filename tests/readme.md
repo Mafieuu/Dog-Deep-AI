@@ -1,6 +1,8 @@
 # README tests  
 
-Ce dossier est dédié aux tests =  du projet
+Ce dossier est dédié aux tests  du projet
+
+|Pour lancer un teste : pytest tests/ --verbose
 
 ## Contenu  
 Il peut contenir :  
