@@ -7,4 +7,5 @@ RUN apt-get update && apt-get install -y git wget \
 
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Augmentez le timeout à 600 secondes (10 minutes) pour fix bug "pip._vendor.urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='files.pythonhosted.org', port=443): Read timed out."
+RUN pip install --no-cache-dir --timeout 600 -r requirements.txt
