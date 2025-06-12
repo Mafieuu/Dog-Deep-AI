@@ -3,6 +3,7 @@ from glob import glob
 import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
+import scipy
 
 # ------------------------------------------------------------------------------------------------------
 
@@ -68,3 +69,53 @@ def show_images(df, max_images=5, figsize=(15, 5)):
         ax.axis('off')
     plt.tight_layout()
     plt.show()
+
+# ------------------------------------------------------------------------------------------------------
+
+def load_train_test_split_mat(
+    images_dir,
+    list_dir,
+    train_file='train_list.mat',
+    test_file='test_list.mat',
+    max_races=None,
+    max_images_per_race=None
+):
+    """
+    Construit deux DataFrames (train/test) à partir des fichiers .mat et des chemins d'images.
+    Garde uniquement : image_path, class, filename.
+    Filtre selon max_races et max_images_per_race.
+    """
+
+    #  toutes les images depuis la structure de dossier
+    df_full = index_dataset(images_dir)  
+
+    train_mat = scipy.io.loadmat(os.path.join(list_dir, train_file))
+    test_mat = scipy.io.loadmat(os.path.join(list_dir, test_file))
+
+    # Extraire les fichiers 
+    train_files = [f[0][0] if isinstance(f[0], np.ndarray) else f[0] for f in train_mat['file_list']]
+    test_files = [f[0][0] if isinstance(f[0], np.ndarray) else f[0] for f in test_mat['file_list']]
+
+    train_filenames = [os.path.basename(f) for f in train_files]
+    test_filenames = [os.path.basename(f) for f in test_files]
+
+    # Filtrage pour ne garder que les images de train et test
+    df_train = df_full[df_full['filename'].isin(train_filenames)][['image_path', 'class', 'filename']].copy()
+    df_test = df_full[df_full['filename'].isin(test_filenames)][['image_path', 'class', 'filename']].copy()
+
+    # Limiter aux max_races
+    if max_races is not None:
+        # On trie les classes par ordre croissant, on prend les max_races premières classes
+        # Ainsi autant de race dans train que dans test
+        top_classes = sorted(df_train['class'].unique())[:max_races]
+        df_train = df_train[df_train['class'].isin(top_classes)]
+        df_test = df_test[df_test['class'].isin(top_classes)]
+
+    # Limiter à max_images_per_race
+    # Pour chaque classe, on garde au maximum max_images_per_race images
+    if max_images_per_race is not None:
+        df_train = df_train.groupby('class').head(max_images_per_race).reset_index(drop=True)
+        df_test = df_test.groupby('class').head(max_images_per_race).reset_index(drop=True)
+
+    return df_train, df_test
+
