@@ -4,6 +4,7 @@ import pandas as pd
 from PIL import Image
 import matplotlib.pyplot as plt
 import scipy
+import numpy as np
 
 # ------------------------------------------------------------------------------------------------------
 
