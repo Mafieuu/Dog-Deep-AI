@@ -4,3 +4,8 @@ data/images/
 data/lists/
 env/
 **/.ipynb_checkpoints/
+.vscode/
+
+data/images_transf_256x256
+data/teste_transf/
+**/__pycache__/
