@@ -1,5 +1,5 @@
 FROM python:3.12.11-slim
-
+#TODO: Configurer Git pour éviter de ressaisir les identifiants dans le Dev Container et en mode container du docker-compose
 WORKDIR /workspace
 
 RUN apt-get update && apt-get install -y git wget \
