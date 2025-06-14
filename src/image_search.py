@@ -120,3 +120,12 @@ def load_train_test_split_mat(
 
     return df_train, df_test
 
+# ------------------------------------------------------------------------------------------------------
+def images_to_numpy(df):
+    X = []
+    y = []
+    for _, row in df.iterrows():
+        img = Image.open(row['image_path']).convert('RGB')
+        X.append(np.array(img))
+        y.append(row['class'])
+    return np.array(X), np.array(y)
