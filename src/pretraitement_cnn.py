@@ -1,6 +1,7 @@
 from PIL import Image
 import os
 import xml.etree.ElementTree as ET
+from scipy.ndimage import zoom
 
 
 def resize_with_padding(img, size=256, padding_color=(0, 0, 0)):
@@ -71,3 +72,22 @@ def recadrer_selon_bbox(img, img_path, annotation_dir, size=256, padding_color=(
     # Resize avec padding
     img_final = resize_with_padding(img_cropped, size=size, padding_color=padding_color)
     return img_final
+
+def resize_array(image_array, target_size=256):
+    """
+    Redimensionne un tableau numpy contenant des images.
+    
+    Args:
+        image_array (numpy.ndarray): Matrice d'images (N, H, W, C)
+        target_size (int): Taille cible (target_size x target_size)
+
+    Returns:
+        numpy.ndarray: Matrice redimensionnée
+    """
+    # Facteur de mise à l'échelle
+    scale_factor = target_size / image_array.shape[1]
+
+    # Redimensionnement avec interpolation
+    resized_array = zoom(image_array, (1, scale_factor, scale_factor, 1), order=1)
+
+    return resized_array
