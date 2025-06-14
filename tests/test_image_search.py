@@ -1,5 +1,7 @@
+import tempfile
 import unittest
 import os
+import numpy as np
 import pandas as pd
 import sys
 from unittest.mock import patch
@@ -136,6 +138,43 @@ class TestShowImages(unittest.TestCase):
         self.assertTrue(result)
 
 # ------------------------------------------------------------------------------------------------------------
+
+class TestImagesToNumpy(unittest.TestCase):
+    def setUp(self):
+        """Créer des images temporaires pour les tests."""
+        self.temp_dir = tempfile.mkdtemp()
+        self.image_paths = []
+        for i in range(3):
+            img = Image.new('RGB', (100, 100), color=(i * 50, i * 50, i * 50))
+            path = os.path.join(self.temp_dir, f"test_img_{i}.png")
+            img.save(path)
+            self.image_paths.append(path)
+
+        self.df = pd.DataFrame({'image_path': self.image_paths, 'class': [0, 1, 2]})
+
+    def tearDown(self):
+        """Supprimer les fichiers temporaires après le test."""
+        for path in self.image_paths:
+            os.remove(path)
+        os.rmdir(self.temp_dir)
+
+    def test_images_to_numpy(self):
+        """Vérifier que la fonction retourne bien des tableaux NumPy."""
+        X, y = image_search.images_to_numpy(self.df)
+        
+        # Vérifier les types
+        self.assertIsInstance(X, np.ndarray)
+        self.assertIsInstance(y, np.ndarray)
+        
+        # Vérifier la forme des tableaux
+        self.assertEqual(len(X), len(self.df))
+        self.assertEqual(len(y), len(self.df))
+        
+        # Vérifier que les classes sont correctes
+        np.testing.assert_array_equal(y, np.array([0, 1, 2]))
+
+
+
 
 if __name__ == "__main__":
     unittest.main()
